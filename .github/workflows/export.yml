@@ -1,0 +1,40 @@
+name: Export builds
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Godot 4.7.2
+        run: |
+          curl -sSL -o godot.zip https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
+          unzip -oq godot.zip
+          mv Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+
+      - name: Install export templates
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates/4.7.2.stable
+          curl -sSL -o templates.tpz https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz
+          unzip -oq templates.tpz -d /tmp/tpl
+          cp /tmp/tpl/templates/* ~/.local/share/godot/export_templates/4.7.2.stable/
+
+      - name: Import project
+        run: godot --headless --import --path .
+
+      # Linux, Windows, macOS (ad-hoc) y Web se pueden construir desde Linux.
+      # Android necesita Android SDK + JDK; iOS necesita macOS + Xcode.
+      - name: Export
+        run: tools/export_all.sh "Linux" "Windows Desktop" "macOS" "Web"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ancleto-builds
+          path: build/
