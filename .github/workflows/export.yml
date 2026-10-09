@@ -3,7 +3,8 @@ name: Export builds
 on:
   workflow_dispatch:
   push:
-    tags: ["v*"]
+    branches: [main]
+    tags: ["v*", "V*"]
 
 jobs:
   export:
