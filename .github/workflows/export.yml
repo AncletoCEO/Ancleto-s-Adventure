@@ -6,6 +6,9 @@ on:
     branches: [main]
     tags: ["v*", "V*"]
 
+permissions:
+  contents: write
+
 jobs:
   export:
     runs-on: ubuntu-latest
@@ -34,8 +37,24 @@ jobs:
       - name: Export
         run: tools/export_all.sh "Linux" "Windows Desktop" "macOS" "Web"
 
+      - name: Package per-OS
+        run: |
+          mkdir -p dist
+          [ -d build/linux ] && tar czf dist/ancleto-linux.tar.gz -C build linux
+          [ -d build/windows ] && tar czf dist/ancleto-windows.tar.gz -C build windows
+          [ -d build/web ] && tar czf dist/ancleto-web.tar.gz -C build web
+          [ -f build/macos/AncletoAdventure.zip ] && cp build/macos/AncletoAdventure.zip dist/ancleto-macos.zip
+          ls -la dist
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ancleto-builds
           path: build/
+
+      - name: Publish release (on tags)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
