@@ -99,8 +99,9 @@
 
 ## Fase 12 — Entrega (ÚLTIMA tarea, solo tras el primer MVP)
 
-- [ ] 12.1 `git init` en el proyecto y remoto `git@github.com:AncletoCEO/Ancleto-s-Adventure.git`.
-- [ ] 12.2 `.gitignore` (ignorar `.godot/`, `shots/`, `build/`; conservar `*.import` y assets).
-- [ ] 12.3 Commit inicial del MVP completo (incluye riggeo y pipeline) y `git push -u origin main`.
+- [x] 12.1 `git init` + remoto `git@github.com:AncletoCEO/Ancleto-s-Adventure.git`.
+- [x] 12.2 `.gitignore` (ignora `.godot/`, `shots/`, `build/`, SQLite transitorio; conserva `*.import` y assets).
+- [x] 12.3 Commit inicial del MVP completo (rebased sobre el `Initial commit` remoto, conservando `LICENSE` y reemplazando el README) y `git push -u origin main` ✅.
+- [x] 12.4 README.md completo con capturas en `docs/screenshots/`.
 
 > **Tracker final**: la Fase 12 es la última. No se sube nada hasta que el primer MVP (Fases 0–11) esté terminado.
